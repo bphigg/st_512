@@ -12,7 +12,7 @@ treadmill
 plot(treadmill$treadmill, treadmill$tenk)
 
 # b
-slr_tread <- lm(treadmill$tenk ~ treadmill$treadmill)
+slr_tread <- lm(tenk ~ treadmill, data=treadmill)
 abline(slr_tread, col=2)
 summary(slr_tread)
 
@@ -27,3 +27,16 @@ RSE <- 2.102 # from slr_tread summary
 RSE**2
 
 #b
+# estimate the standard error for b_hat_1
+# 0.3462 - summary output
+
+#c
+# place a 95% CI on b_hat_1
+confint(slr_tread, 'treadmill', level=0.90)
+
+#d
+# hypothesis test that there is a linear relationship between treadmill time and 10K time
+# Pr(>|t|) for 'treadmill' from summary output
+# 3.99e-05 - near zero percent chance of the null hypothesis (b_hat_1 = 0) occuring for the t value 
+# -5.393 in the student t-distribution. Reject H_0 - conclude there is a linear relationship between 
+# treadmill time and 10K time

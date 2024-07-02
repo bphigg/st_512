@@ -1,0 +1,69 @@
+---
+title: "HW_1_bhigginbotham"
+author: "brian higginbotham"
+date: "2024-07-02"
+urlcolor: blue
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warnings = FALSE, error = FALSE)
+```
+
+## 11.22
+
+```{r treadmill data}
+treadmill <- read.table(file="data/fitness.txt", header=TRUE)
+```
+
+### a) plot the data
+
+```{r plot treadmill}
+plot(treadmill$treadmill, treadmill$tenk)
+```
+
+### b) Fit regression model to the data
+
+```{r fit regression}
+slr_tread <- lm(tenk ~ treadmill, data=treadmill)
+plot(treadmill$treadmill, treadmill$tenk)
+abline(slr_tread, col=2)
+```
+The linear model does seem appropriate - there is an overall downward trend in the data that is reflected in the model.
+
+### c) estimate the linear regression model
+
+```{r model summary}
+summary(slr_tread)
+```
+We see from the summary output that the estimates for the linear model are `b_hat_0 (Intercept) = 58.8158` and `b_hat_1 (slope) = -1.8673`. Therefore the estimate for the linear regression model would be
+
+`y_hat = 58.8158 - 1.8673x_i` for any given `i`.
+
+## 11.23
+
+### a) estimate population variance for errors (sigma^2_e)
+
+`Residual Standard Error (RSE) = 2.102`  
+`RSE = sqrt(sigma^2_e)`  
+`RSE^2 = sigma^2_e`
+```{r error variance}
+RSE <- 2.102
+RSE**2
+```
+Estimate for error variance
+
+### b) estimate standard error for b_hat_1
+
+`0.3462` - from summary output: Std. Error for 'treadmill'
+
+### c) 95% Confidence Interval for b_hat_1
+```{r b_hat_1 CI}
+confint(slr_tread, 'treadmill', level=0.95)
+```
+the plausible values of b_1, given a significance level of 0.05 would be
+`-2.59 < b_1 < -1.140`
+
+### d) hypothesis test that there is a linear relationship between treadmill time and 10K time
+`Pr(>|t|)` for 'treadmill' from summary output = `3.99e-05` - near zero percent chance of the null hypothesis (b_hat_1 = 0) occuring for the t value `-5.393` in the student t-distribution.  
+**Reject H_0** - conclude there is a linear relationship between treadmill time and 10K time
