@@ -5,7 +5,7 @@
 
 # Read in data
 
-rats <- read.table(file="../Data/example_12-21.txt", header=TRUE)
+rats <- read.table(file="data/example_12-21.txt", header=TRUE)
 print(rats)
 
 y <- rats$score

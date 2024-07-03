@@ -38,7 +38,7 @@ summary(slr_tread)
 ```
 We see from the summary output that the estimates for the linear model are `b_hat_0 (Intercept) = 58.8158` and `b_hat_1 (slope) = -1.8673`. Therefore the estimate for the linear regression model would be
 
-`y_hat = 58.8158 - 1.8673x_i` for any given `i`.
+`y_hat = 58.8158 - 1.8673x_i + e` for any given `i`. `e` represents the error or unknowns that were not accounted for in the data.
 
 ## 11.23
 
@@ -67,3 +67,37 @@ the plausible values of b_1, given a significance level of 0.05 would be
 ### d) hypothesis test that there is a linear relationship between treadmill time and 10K time
 `Pr(>|t|)` for 'treadmill' from summary output = `3.99e-05` - near zero percent chance of the null hypothesis (b_hat_1 = 0) occuring for the t value `-5.393` in the student t-distribution.  
 **Reject H_0** - conclude there is a linear relationship between treadmill time and 10K time
+
+## 11.36
+### a) Estimate the mean time to run 10km for athletes having a treadmill time of 11 minutes.
+From 11.22c, we noted that the linear regression model was `y_hat = 58.8158 - 1.8673x_i + e`. Since we assume that the errors have a mean of `0`, we can estimate the mean response (time to run 10km) by using the value `11` for `x_i`.
+```{r estimate mean time}
+mu_new <- 58.8158 - 1.8673*11
+mu_new
+```
+### b) Place a 95% CI on the mean time to run 10km for the above estimate
+Here we'll use the `predict()` function and set the *interval* argument to **'conf'** and *level* argument to **'0.95'**
+```{r CI for mean estimate}
+predict(slr_tread, data.frame(treadmill=11), interval="conf", level =0.95)
+```
+`fit` is the mean response and `lwr` and `upr` are the bounds of the **95%** CI.
+
+## 11.37
+### a) Predict the time to run 10km if an athlete has a treadmill time of 11 minutes
+Predictions will use the same regression model formula as estimated means. We cannot use the assumed error average (0) to nullify the error term, but we do assume that the error portion of a new prediction is close to `0`, so the predicted value will equal the average value: `y_new = mu_new`.
+```{r predicted value}
+y_new <- 58.8158 - 1.8673*11
+y_new
+```
+### b) Place a 95% PI (Prediction Interval) on the above prediction
+We'll use the same `predict()` function but set the *interval* argument to **'pred'**. The *level* argument will remain **'0.95'**.
+```{r PI for prediction estimate}
+predict(slr_tread, data.frame(treadmill=11), interval="pred", level =0.95)
+```
+`fit` is the predicted response and `lwr` and `upr` are the bounds of the **95%** CI.  
+
+### c) Compare the PI to CI in 11.36. What is the difference in the interpretation of the two intervals? Why is one interval wider than the other?
+
+The estimated mean is the average of a collection of data were treadmill time equals 11. As such, we would expect a similar average to occur in repeated studies with some variability. The CI for the estimated mean reflects this variability. The predicted value is an unknown and represents the possible time to complete 10km for any one individual whose treadmill time is 11 minutes. As such the prediction will have additional variance associated with it. This additional variance accounts for the wider interval in the PI than the CI.
+
+This makes sense when we think about the comparison between averages and the individual datum that make up those averages. The variability between averages of similar measurements will be less than the variability of predicting what one of those measurements is.
