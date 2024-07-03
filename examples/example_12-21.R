@@ -1,43 +1,31 @@
 
 ## ST512 
 ## Author: Prof Ryan Martin (www4.stat.ncsu.edu/~rmartin)
-## R code for (variation on) Example 12.21 in Ott & Longnecker
+## R code for Example 12.21 in Ott & Longnecker
 
 # Read in data
 
-rats <- read.table(file="../Data/example_12-21_mod.txt", header=TRUE)
+rats <- read.table(file="../Data/example_12-21.txt", header=TRUE)
 print(rats)
 
-# Manual coding of dummy variable, partial F test
+y <- rats$score
+x1 <- rats$drug == 'A'
+x2 <- rats$dose
 
-dummy.B <- as.numeric(rats$drug == 'B')
-dummy.C <- as.numeric(rats$drug == 'C')
+plot(y ~ x2, col=1 + x1)
+plot(y ~ jitter(x2), col=1 + x1) # better visualization 
 
-o.full <- lm(rats$score ~ rats$dose + dummy.B + dummy.C)
-o.red <- lm(rats$score ~ rats$dose)
-summary(o.full)
-anova(o.full)
-summary(o.red)
-anova(o.red)
+x3 <- x1 * x2
+o <- lm(y ~ x1 + x2 + x3)
+summary(o)
+abline(a=o$coefficients[1], b=o$coefficients[3])
+abline(a=sum(o$coefficients[1:2]), b=sum(o$coefficients[3:4]), col=2)
 
-anova(o.red, o.full)
+# Separate simple linear regression models to the groups
+## same fitted lines
+## joint model has only one error variance to estimate...
 
-# Tell R that the variable is categorical, let it do the work
-
-o.full <- lm(score ~ dose + factor(drug), data=rats)
-o.red <- lm(score ~ dose, data=rats)
-#summary(o)
-anova(o.red, o.full)
-
-# R will recognize categorical/factors if expressed as characters
-
-summary(lm(score ~ dose + drug, data=rats))
-
-# But it won't if coding of levels is numerical...
-# The following analysis is WRONG!
-
-drug.num <- 1 * (rats$drug == 'A') + 2 * (rats$drug == 'B') + 3 * (rats$drug == 'C')
-o.wrong <- lm(rats$score ~ rats$dose + drug.num)
-summary(o.wrong)
+abline(lm(y ~ x2, subset=(x1==0)), lty=2, col=1)
+abline(lm(y ~ x2, subset=(x1==1)), lty=2, col=2)
 
 
