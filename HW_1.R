@@ -40,3 +40,11 @@ confint(slr_tread, 'treadmill', level=0.90)
 # 3.99e-05 - near zero percent chance of the null hypothesis (b_hat_1 = 0) occuring for the t value 
 # -5.393 in the student t-distribution. Reject H_0 - conclude there is a linear relationship between 
 # treadmill time and 10K time
+
+y_hat <- 58.8158 - 1.8673*11
+y_hat
+
+
+predict(slr_tread, data.frame(treadmill=11), interval="conf", level =0.95)
+
+predict(slr_tread, data.frame(treadmill=11), interval="pred", level =0.95)
