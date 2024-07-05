@@ -48,3 +48,34 @@ y_hat
 predict(slr_tread, data.frame(treadmill=11), interval="conf", level =0.95)
 
 predict(slr_tread, data.frame(treadmill=11), interval="pred", level =0.95)
+
+
+drug <- read.table(file="data/drug.txt", header=TRUE)
+drug
+y<-drug$response
+x<-drug$dose
+plot(x,y)
+slr_drug <- lm(y ~ x)
+summary(slr_drug)
+abline(slr_drug, col=4)
+slr_drug$residuals
+
+plot(slr_drug$fitted.values, slr_drug$residuals)
+abline(h=0, col=6)
+plot(x, slr_drug$residuals)
+abline(h=0, col=5)
+qqnorm(slr_drug$residuals); qqline(slr_drug$residuals)
+
+# 11.42
+xi<-log(x)
+xi
+plot(xi,y)
+slr_drug <- lm(y ~ xi)
+summary(slr_drug)
+abline(slr_drug, col=4)
+
+plot(slr_drug$fitted.values, slr_drug$residuals)
+abline(h=0, col=6)
+plot(xi, slr_drug$residuals)
+abline(h=0, col=5)
+qqnorm(slr_drug$residuals); qqline(slr_drug$residuals)

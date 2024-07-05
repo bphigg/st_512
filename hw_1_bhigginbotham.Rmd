@@ -44,7 +44,7 @@ We see from the summary output that the estimates for the linear model are `b_ha
 
 ### a) estimate population variance for errors (sigma^2_e)
 
-`Residual Standard Error (RSE) = 2.102`  
+`Residual Standard Error (RSE) = 2.102` - from model summary  
 `RSE = sqrt(sigma^2_e)`  
 `RSE^2 = sigma^2_e`
 ```{r error variance}
@@ -101,3 +101,79 @@ predict(slr_tread, data.frame(treadmill=11), interval="pred", level =0.95)
 The estimated mean is the average of a collection of data were treadmill time equals 11. As such, we would expect a similar average to occur in repeated studies with some variability. The CI for the estimated mean reflects this variability. The predicted value is an unknown and represents the possible time to complete 10km for any one individual whose treadmill time is 11 minutes. As such the prediction will have additional variance associated with it. This additional variance accounts for the wider interval in the PI than the CI.
 
 This makes sense when we think about the comparison between averages and the individual datum that make up those averages. The variability between averages of similar measurements will be less than the variability of predicting what one of those measurements is.
+
+## 11.40
+
+```{r drug data}
+drug <- read.table(file="data/drug.txt", header=TRUE)
+drug
+```
+
+### a) Plot the Data
+```{r plot drug}
+y<-drug$response
+x<-drug$dose
+plot(x,y)
+```
+
+### b) Fit a Linear Regression Model
+```{r fit drug SLR}
+slr_drug <- lm(y ~ x)
+summary(slr_drug)
+plot(x,y)
+abline(slr_drug, col=4)
+```
+
+### c) Plot the residuals and evaluate model fit
+
+We'll first check linearity by plotting the residuals vs. the y_hats (fitted values). If there is a linear relationship between the two, then we would expect the residuals to be randomly scattered about the plot, forming no discernable pattern.
+```{r residual plots}
+plot(slr_drug$fitted.values, slr_drug$residuals)
+abline(h=0, col=6)
+```
+Although the data is limited, we can see from the plot that the residuals are not evenly or randomly scattered about. The residuals take on a kind of arch pattern - starting at negative and increasing to the mid-way point along the x-axis and then decreasing again into the negative.
+
+From this plot, we should be aware that there is a possible lack of fit in the linear model to the data.
+
+## 11.42
+Transform `dose` variable to the natural log and re-evaluate the data
+```{r x transform}
+xi<-log(x)
+```
+
+### a) Plot the transformed data
+```{r plot drug transform}
+plot(xi,y)
+```
+Compared to our previous plot from `11.40a`, there is definitely a more linear pattern to the data.
+
+### b) Fit linear regression model
+```{r slr drug transform}
+slr_drug2 <- lm(y ~ xi)
+summary(slr_drug2)
+plot(xi, y)
+abline(slr_drug2, col=4)
+```
+
+### c) Plot the residuals
+```{r drug transform residual plot}
+plot(slr_drug2$fitted.values, slr_drug2$residuals)
+abline(h=0, col=6)
+```
+Here, we see a more random scattering of the residuals than before. There is no discernible pattern in the plot which backs up our assumption of linearity.
+
+Let's check to see if the residuals are normally distributed using a `QQ-Plot`.
+```{r drug transform QQPlot}
+qqnorm(slr_drug2$residuals)
+qqline(slr_drug2$residuals)
+```
+There are two points that deviate from the line towards the edge of the plot which can be expected in a quantile plot. Otherwise, the residuals follow pretty closely to the normal distribution, which would be expected for our linear assumption.
+
+### d) Conduct a test for lack of fit of the linear regression model
+This test was done for us in the `lm()` fit. The test for lack of fit proposes the null hypothesis to be `beta_hat_1 = 0` - i.e. there is no linear or slope relationship between the variables. To view the results of this test, we'll reprint the model summary.
+```{r drug transform model summary}
+summary(slr_drug2)
+```
+From the Coefficients section we can see the calculated **t-value** and **p-score** of `beta_hat_1` (`xi`).
+`Pr(>|t|)` for 'xi' from summary output = `2.95e-10` - near zero percent chance of the null hypothesis (beta_hat_1 = 0) occuring for the t value `16.985` in the student t-distribution.  
+**Reject H_0** - conclude there is a linear relationship between the natural log of the dose and the response.
