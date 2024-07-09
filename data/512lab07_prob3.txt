@@ -1,0 +1,17 @@
+state trt activity
+normal placebo 50
+normal placebo 45
+normal placebo 55
+normal placebo 52
+normal drug 67
+normal drug 60
+normal drug 58
+normal drug 65
+hyper placebo 70
+hyper placebo 72
+hyper placebo 68
+hyper placebo 75
+hyper drug 51
+hyper drug 57
+hyper drug 48
+hyper drug 55
