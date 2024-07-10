@@ -5,7 +5,7 @@
 
 # Read in data, print, draw basic plot
 
-bass <- read.table(file="../Data/example_12-17.txt", header=TRUE)
+bass <- read.table(file="data/example_12-17.txt", header=TRUE)
 print(bass)
 plot(bass)
 
