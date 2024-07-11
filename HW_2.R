@@ -49,3 +49,33 @@ predict(med_fit, data.frame(x_1=4, x_2=3), interval="pred", level=0.95)
 # compare b) and c)
 # The fitted value for estimated mean and prediction are the same since both use the same linear model. However, the 95% intervals for the values is different. The 95% prediction interval is larger than the 95% confidence interval for estimated mean. This is because the prediction interval is based on the estimated mean plus an additional error term, which in turn increases the interval. 
 
+# 12.23
+# a)
+# an R^2 value of 58.2% means that 58.2% of the variation in the data is explained by the model. This value is calculated using values obtained in the Partition of the Sum-of-Squares equation: SS(Total) = SS(Error) + SS(Model), where SS(Total) is the total sum of squares in the data (sum of the squared distance between the response and the mean of the responses); SS(Error) is the sum of the squared distance between the response and the modeled response; and SS(Model) is the sum of the squared distance between the modeled response and the mean of the actual response). R^2 is the ratio of SS(Model) to SS(Total) which returns the ratio of the model to the total. The closer R^2 is to 1, the closer the SS(Model) is to SS(Total) which indicates that the model accounts for variability well (i.e. there is low SS(Error)).
+
+# b)
+fitness <- read.table(file="data/example_12-6.txt", header=TRUE)
+print(fitness)
+o <- lm(oxygen ~ weight + age + time + rate, data=fitness)
+summary(o)
+fitness$weight_sq <- fitness$weight**2
+fitness$age_sq <- fitness$age**2
+fitness$time_sq <- fitness$time**2
+fitness$rate_sq <- fitness$rate**2
+o_quad <- lm(oxygen ~ weight + age + time + rate + weight_sq + age_sq + time_sq + rate_sq, data = fitness)
+summary(o_quad)
+
+# fitting a quadratic model and comparing the R^2 results shows an increase of
+0.5925 - 0.5815
+
+# c)
+# The quadratic model has NO slope coefficients below the 0.05 significance level. In fact, they all look pretty bad in confirming the individual hypothesis test that each coefficient could plausibly be zero which means none would be useful in the model.
+
+# d)
+# perform an ANOVA test on the full model (quadratic) and the reduced model (first-order)
+anova(o, o_quad)
+
+# The resultant p-value is very large compared to the 0.05 significance level. Therefore, we cannot reject the null hypothesis that posits the quadratic group of variables (those missing from the reduced model) do NOT contribute to or improve the fit of the first-order model.
+
+# e)
+# The first-order model would be strongly recommended over the combined first- and second-order model. All measurements indicate that the first- and second-order model is a weaker fit - the small increase to R^2, the high p-values of all the second-order model coefficients and the failure to reject the null hypothesis regarding the squared terms in the ANOVA test.

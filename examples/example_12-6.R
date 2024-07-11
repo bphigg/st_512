@@ -1,11 +1,11 @@
-
+ 
 ## ST512 
 ## Author: Prof Ryan Martin (www4.stat.ncsu.edu/~rmartin)
 ## R code for Example 12.6 in Ott & Longnecker
 
 # Read in data
 
-fitness <- read.table(file="../Data/example_12-6.txt", header=TRUE)
+fitness <- read.table(file="data/example_12-6.txt", header=TRUE)
 print(fitness)
 
 # Pairwise investigations
