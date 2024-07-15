@@ -6,7 +6,7 @@
 
 # Start with the BAC analysis from before
 
-beer <- read.table(file="../Data/beer.txt", header=TRUE)
+beer <- read.table(file="data/beer.txt", header=TRUE)
 y <- beer$BAC
 x <- beer$Beers
 plot(x, y)
@@ -21,5 +21,6 @@ cor(x, z)
 o <- lm(y ~ x + z)
 summary(o)
 
+plot(x,z)
 
 

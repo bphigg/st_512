@@ -5,7 +5,7 @@
 
 # Read in data
 
-paint <- read.table(file="../Data/example_14-2.txt", header=TRUE)
+paint <- read.table(file="data/example_14-2.txt", header=TRUE)
 print(paint)
 
 # Numerical and graphical summaries

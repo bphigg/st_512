@@ -25,7 +25,13 @@ abline(a=sum(o$coefficients[1:2]), b=sum(o$coefficients[3:4]), col=2)
 ## same fitted lines
 ## joint model has only one error variance to estimate...
 
+o_ <- lm(y ~ x2, subset=(x1==0))
+o__ <- lm(y ~ x2, subset=(x1==1))
+summary(o_)
+summary(o__)
+
 abline(lm(y ~ x2, subset=(x1==0)), lty=2, col=1)
 abline(lm(y ~ x2, subset=(x1==1)), lty=2, col=2)
+
 
 

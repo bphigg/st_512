@@ -5,7 +5,7 @@
 
 # Read in data
 
-hostility <- read.table(file="../Data/example_8-2.txt", header=TRUE)
+hostility <- read.table(file="data/example_8-2.txt", header=TRUE)
 print(hostility)
 
 # Numerical and graphical summaries
