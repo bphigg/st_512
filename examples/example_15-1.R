@@ -5,7 +5,7 @@
 
 # Read in data
 
-bean <- read.table(file="../Data/example_15-1.txt", header=TRUE)
+bean <- read.table(file="data/example_15-1.txt", header=TRUE)
 print(bean)
 
 # Code factors as *factors*

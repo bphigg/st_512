@@ -12,14 +12,23 @@ tapply(corn$yield, corn$corn, sd)
 corn_means <- tapply(corn$yield, corn$corn, mean)
 corn_stds <- tapply(corn$yield, corn$corn, sd)
 t_star <- qt(0.975, 7)
-typeA <- corn_means[1] + c(1,-1)*t_star*(corn_stds[1]/sqrt(7))
-typeB <- corn_means[2] + c(1,-1)*t_star*(corn_stds[2]/sqrt(7))
-typeC <- corn_means[3] + c(1,-1)*t_star*(corn_stds[3]/sqrt(7))
-typeD <- corn_means[4] + c(1,-1)*t_star*(corn_stds[4]/sqrt(7))
+typeA <- c(corn_means[1], corn_means[1] + c(1,-1)*t_star*(corn_stds[1]/sqrt(7)))
+typeB <- c(corn_means[2], corn_means[2] + c(1,-1)*t_star*(corn_stds[2]/sqrt(7)))
+typeC <- c(corn_means[3], corn_means[3] + c(1,-1)*t_star*(corn_stds[3]/sqrt(7)))
+typeD <- c(corn_means[4], corn_means[4] + c(1,-1)*t_star*(corn_stds[4]/sqrt(7)))
 cbind(typeA, typeB, typeC, typeD)
+rbind(typeA, typeB, typeC, typeD)
+data.frame(index=c('mean', 'upper', 'lower'), typeA, typeB, typeC, typeD)
+data.frame(typeA, typeB, typeC, typeD, row.names=c('mean', 'upper', 'lower'))
+
+# Looking at the means and CI's for the four types of corn, I would infer that the four corn varieties are NOT the same. The means of TypeB and Type C exceed the upper CI of the means for TypeA and TypeD. This would indicate that the means of all four corn varieties are not equal - there is a difference in yield between types.
 
 boxplot(yield ~ corn, data=corn)
 
 ## c)
 o <- lm(yield ~ corn, data = corn)
 summary(o)
+anova(o)
+
+# The overall F-test for the model confirms our suspicions in part b) - the low p-value of 5.85e-05 indicates an almost zero plausibility that the means of all four corn varieties are the same. So we can reject the null hypothesis and accept the alternative hypothesis that there is a difference between the means.
+

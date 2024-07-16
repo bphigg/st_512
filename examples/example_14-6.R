@@ -5,7 +5,7 @@
 
 # Read in data
 
-citrus <- read.table(file="../Data/example_14-6.txt", header=TRUE)
+citrus <- read.table(file="data/example_14-6.txt", header=TRUE)
 print(citrus)
 
 # Marginal summaries
