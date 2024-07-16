@@ -21,6 +21,8 @@ summary(o)
 abline(a=o$coefficients[1], b=o$coefficients[3])
 abline(a=sum(o$coefficients[1:2]), b=sum(o$coefficients[3:4]), col=2)
 
+summary(lm(y~x2*x1))
+
 # Separate simple linear regression models to the groups
 ## same fitted lines
 ## joint model has only one error variance to estimate...

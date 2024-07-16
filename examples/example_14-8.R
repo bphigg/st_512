@@ -5,7 +5,7 @@
 
 # Read in data
 
-rose <- read.table(file="../Data/example_14-8.txt", header=TRUE)
+rose <- read.table(file="data/example_14-8.txt", header=TRUE)
 print(rose)
 
 # Code factors as *factors*

@@ -32,3 +32,26 @@ anova(o)
 
 # The overall F-test for the model confirms our suspicions in part b) - the low p-value of 5.85e-05 indicates an almost zero plausibility that the means of all four corn varieties are the same. So we can reject the null hypothesis and accept the alternative hypothesis that there is a difference between the means.
 
+## 8.39
+
+library(emmeans)
+
+peach <- read.table(file="data/512hw03_prob2.txt", header=TRUE)
+print(peach)
+
+peach$herb <- factor(peach$herb)
+levels(peach$herb)
+
+## a) run an ANOVA for detecting differences in seedling heights for all three groups
+
+peach_lm <- lm(height ~ herb, data=peach)
+summary(peach_lm)
+anova(peach_lm)
+
+## b) test if the mean seedling height for each herbicide is different from the control
+
+peach_emm <- emmeans(peach_lm, "herb")
+peach_contr <- contrast(peach_emm, list("ctrl_vs_nem"=c(1, -1, 0), "ctrl_vs_no_nem"=c(1,0,-1), 
+                                        "nem_vs_no_nem"=c(0,1,-1)))
+summary(peach_contr, infer=c(TRUE, TRUE)) 
+
