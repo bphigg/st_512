@@ -12,6 +12,8 @@ plot(bass)
 o.full <- lm(catch ~ residence + size + access + structure, data=bass)
 o.red <- lm(catch ~ residence + size, data=bass)
 anova(o.full)
+summary(o.full)
 anova(o.red)
+summary(o.red)
 
 anova(o.red, o.full)

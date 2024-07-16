@@ -1,6 +1,6 @@
 ### HW 3
 
-## 8.32
+## 1 (8.32)
 
 corn <- read.table(file="data/512hw03_prob1.txt", header=TRUE)
 print(corn)
@@ -32,7 +32,7 @@ anova(o)
 
 # The overall F-test for the model confirms our suspicions in part b) - the low p-value of 5.85e-05 indicates an almost zero plausibility that the means of all four corn varieties are the same. So we can reject the null hypothesis and accept the alternative hypothesis that there is a difference between the means.
 
-## 8.39
+## 2 (8.39)
 
 library(emmeans)
 
@@ -55,3 +55,32 @@ peach_contr <- contrast(peach_emm, list("ctrl_vs_nem"=c(1, -1, 0), "ctrl_vs_no_n
                                         "nem_vs_no_nem"=c(0,1,-1)))
 summary(peach_contr, infer=c(TRUE, TRUE)) 
 
+
+## 3
+## a) y_hat_ij = mu + tau_i + e_ij, where tau_1 = 0
+## y_hat_ij is the predicted or estimated mean response for the amount offered by replicate j within treatment i. mu is the baseline mean, which is the calculated mean for factor 1 (which is why tau_1 is equal to 0). tau_i is the change in the mean for treatment i. e_ij is the error for each of the "buyers". 
+
+## b) fit model and conduct overall F-test
+offer <- read.table(file="data/512hw03_prob3.txt", header=TRUE)
+print(offer)
+
+offer$age <- factor(offer$age)
+levels(offer$age)
+
+offer_lm <- lm(offer ~ age, data=offer)
+summary(offer_lm)
+anova(offer_lm)
+
+## The null hypothesis states that the means for all three treatments is the same - H_0: tau_1 = tau_2 = tau_3 = 0. the alternative hypothesis is that at least one of the tau's is not equal to 0 - H_A: tau_i != 0.
+## The results of the ANOVA analysis show that the plausibility that all three tau's are equal to 0 is very small - 4.769e_12. This is significanlty below the significance level of 0.05 and so we can conclude that at least one of tau's is not equal to 0 and that somewhere there is statistically significant difference between the means of the treatments.
+
+## c) use a contrast to compare the mean offer to elderly sellers to the average for young and middle-age sellers
+
+offer_emm <- emmeans(offer_lm, "age")
+offer_contr <- contrast(offer_emm, list("e_vs_my"=c(1, -.5, -.5), "m_vs_ey"=c(-.5,1,-.5), 
+                                        "e_vs_y"=c(1,0,-1)))
+summary(offer_contr, infer=c(TRUE, TRUE)) 
+
+## contrasting the mean for the elderly offers and the average of the young and middle-age offers confirms that there is a statisically significant difference between the two. A p-value less than .001 suggests that the two means being equivalent is not plausible.
+## interestingly, if we look at the summary table for the model we see that the mean for the elderly offer is the base mean and that the mean offer to the young sellers may not be statistically different from the elderly mean given the high p-value of 0.898.
+## if there is no statistical difference between the elderly and young offers, then perhaps the strongest difference would be between the offers to the middle-age seller and the offers to the elderly and young sellers. Such a contrast reveals the highest t-ratio with a corresponding p-value also less than 0.0001

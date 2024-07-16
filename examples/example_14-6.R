@@ -37,6 +37,7 @@ with(citrus, interaction.plot(pest, vari, yield))
 
 o.citrus <- lm(yield ~ pest * vari, data=citrus)
 summary(o.citrus)
+anova(o.citrus)
 
 # Looks like interaction isn't important...
 # Use partial F test to check
