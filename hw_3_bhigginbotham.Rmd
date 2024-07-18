@@ -1,0 +1,126 @@
+---
+title: "hw_3_bhigginbotham"
+author: "brian higginbotham"
+date: "`r Sys.Date()`"
+output:
+  pdf_document: default
+  html_notebook: default
+---
+
+## 1) excercise 8.32
+.
+```{r}
+corn <- read.table(file="data/512hw03_prob1.txt", header=TRUE)
+print(corn)
+```
+
+#### a) find sample mean and std of yield for each of the four varieties of corn
+.
+```{r}
+## means
+tapply(corn$yield, corn$corn, mean)
+## std
+tapply(corn$yield, corn$corn, sd)
+```
+#### b) find 95% CI for means; based on the results, are the four varieties the same?
+.
+```{r}
+corn_means <- tapply(corn$yield, corn$corn, mean)
+corn_stds <- tapply(corn$yield, corn$corn, sd)
+t_star <- qt(0.975, 7)
+typeA <- c(corn_means[1], corn_means[1] + c(1,-1)*t_star*(corn_stds[1]/sqrt(7)))
+typeB <- c(corn_means[2], corn_means[2] + c(1,-1)*t_star*(corn_stds[2]/sqrt(7)))
+typeC <- c(corn_means[3], corn_means[3] + c(1,-1)*t_star*(corn_stds[3]/sqrt(7)))
+typeD <- c(corn_means[4], corn_means[4] + c(1,-1)*t_star*(corn_stds[4]/sqrt(7)))
+
+data.frame(typeA, typeB, typeC, typeD, row.names=c('mean', 'upper', 'lower'))
+```
+Looking at the means and CI's for the four types of corn, I would infer that the four corn varieties are NOT the same. The means of TypeB and Type C exceed the upper CI of the means for TypeA and TypeD. This would indicate that the means of all four corn varieties are not equal - there is a difference in yield between types.
+
+Take a look at a boxplot to visualize the differences.
+```{r}
+boxplot(yield ~ corn, data=corn)
+```
+There does appear to be some difference between A&D and B&C.
+
+#### c) fit a one-way ANOVA model and conduct an F-test. State any conclusions.
+.
+```{r}
+o <- lm(yield ~ corn, data = corn)
+anova(o)
+```
+The overall F-test for the model confirms our suspicions in part b) - the low p-value of 5.85e-05 indicates an almost zero plausibility that the means of all four corn varieties are the same. So we can reject the null hypothesis and accept the alternative hypothesis that there is a difference between the means.
+
+## 2) excercise 8.39
+.
+```{r}
+library(emmeans)
+
+peach <- read.table(file="data/512hw03_prob2.txt", header=TRUE)
+print(peach)
+
+peach$herb <- factor(peach$herb)
+```
+## a) run an ANOVA for detecting differences in seedling heights for all three groups
+.
+```{r}
+peach_lm <- lm(height ~ herb, data=peach)
+anova(peach_lm)
+```
+The resulting p-value is extremely small and thus less than the 0.05 significance level, indicating that we can reject the null hypothesis which is that there is no difference in height among the three herbicide categories - thus we conclude that there is a statistically significant difference in the heights in at least one of the categories.
+
+## b) test if the mean seedling height for each herbicide is different from the control
+First, we need to note the order of the categories
+```{r}
+levels(peach$herb)
+```
+From the textbook, we know **A = control**, **B = herbicide with nemagone**, and **c = herbicide without nemagone**  
+Now we can set the contrast vectors and run the test
+```{r}
+peach_emm <- emmeans(peach_lm, "herb")
+peach_contr <- contrast(peach_emm, list("ctrl_vs_nem"=c(1, -1, 0), "ctrl_vs_no_nem"=c(1,0,-1), 
+                                        "nem_vs_no_nem"=c(0,1,-1)))
+summary(peach_contr, infer=c(TRUE, TRUE)) 
+```
+I set up the third contrast out of curiosity - is there a difference between the two types of herbicide. The results indicate that there is a difference between all three categories, with the strongest difference between the control and the herbicide **without** nemagone.
+
+## 3)
+#### a)
+`y_hat_ij = mu + tau_i + e_ij, where tau_1 = 0`
+
+y_hat_ij is the predicted or estimated mean response for the amount offered by replicate j within treatment i. mu is the baseline mean, which is the calculated mean for factor 1 (which is why tau_1 is equal to 0). tau_i is the change in the mean for treatment i. e_ij is the error for each of the "buyers".
+
+#### b) fit model and conduct overall F-test
+.
+```{r}
+offer <- read.table(file="data/512hw03_prob3.txt", header=TRUE)
+print(offer)
+```
+```{r}
+offer$age <- factor(offer$age)
+levels(offer$age)
+```
+```{r}
+offer_lm <- lm(offer ~ age, data=offer)
+anova(offer_lm)
+```
+The null hypothesis states that the means for all three treatments is the same - `H_0: tau_1 = tau_2 = tau_3 = 0`. the alternative hypothesis is that at least one of the tau's is not equal to 0 - `H_A: tau_i != 0`.  
+
+The results of the ANOVA analysis show that the plausibility that all three tau's are equal to 0 is very small - 4.769e-12. This is significantly below the significance level of 0.05 and so we can conclude that at least one of tau's is not equal to 0 and that somewhere there is statistically significant difference between the means of the treatments.
+
+#### c) use a contrast to compare the mean offer to elderly sellers to the average for young and middle-age sellers
+Remember the order of the factors from above - "E", "M", "Y", where **E = elderly**, **M = middle-age**, and **Y = young**
+```{r}
+offer_emm <- emmeans(offer_lm, "age")
+offer_contr <- contrast(offer_emm, list("e_vs_my"=c(1, -.5, -.5), "m_vs_ey"=c(-.5,1,-.5), 
+                                        "e_vs_y"=c(1,0,-1)))
+summary(offer_contr, infer=c(TRUE, TRUE)) 
+```
+contrasting the mean for the elderly offers and the average of the young and middle-age offers confirms that there is a statisically significant difference between the two. A p-value less than .001 suggests that the two means being equivalent is not plausible.  
+
+```{r}
+summary(offer_lm)
+```
+interestingly, if we look at the summary table for the model we see that the mean for the elderly offer is the base mean and that the mean offer to the young sellers may not be statistically different from the elderly mean given the high p-value of 0.898.  
+
+if there is no statistical difference between the elderly and young offers, then perhaps the strongest difference would be between the offers to the middle-age seller and the offers to the elderly and young sellers. Such a contrast reveals the **largest t-ratio** with a corresponding p-value also less than 0.0001
