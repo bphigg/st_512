@@ -3,7 +3,7 @@
 ## Author: Prof Ryan Martin (www4.stat.ncsu.edu/~rmartin)
 ## R code for Example 17.1 in Ott & Longnecker
 
-lightning <- read.table(file="../Data/example_17-1.txt", header=TRUE)
+lightning <- read.table(file="data/example_17-1.txt", header=TRUE)
 print(lightning)
 
 lightning$station <- factor(lightning$station)

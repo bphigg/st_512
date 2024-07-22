@@ -28,6 +28,11 @@ FF <- (hat.sigma2.eps + 10 * hat.sigma2.tau) / hat.sigma2.eps
 cbind(F=FF, p.value=1 - pf(FF, df1=4, df2=36))
 
 library(EMSaov)
-ooo <- EMSanova(dna ~ subject + analyst, data=plaque, type=c("R", "R"))
-print(ooo)
+EMSanova(dna ~ subject + analyst, data=plaque, type=c("R", "R"))
+
+# Full vs reduced model comparison
+oo.red <- lmer(dna ~ (1 | subject), data=plaque)
+summary(oo.red)
+anova(oo.red, oo)
+
 

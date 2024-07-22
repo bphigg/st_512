@@ -33,7 +33,7 @@ boxplot(calcium ~ lab * assay, data=food)
 points(fitted.lmer[,3], col=2, pch="X")
 
 # Reduced model 
-ooo <- lmer(calcium ~ (1 | lab), data=food)
+ooo <- lmer(calcium ~ (1 | lab) + (1 | assay), data=food)
 summary(ooo)
 anova(ooo, oo)
 
