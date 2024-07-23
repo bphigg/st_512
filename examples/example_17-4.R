@@ -25,3 +25,11 @@ summary(oo.lmer)
 
 anova(oo.lmer, o.lmer)
 
+# Same test for interaction as above but now with lmerTest
+
+library(lmerTest)
+
+o.lmer <- lmer(y ~ sunscreen + (1 | tech) + (1 | sunscreen:tech), data=sun)
+summary(o.lmer)
+ranova(o.lmer)
+
