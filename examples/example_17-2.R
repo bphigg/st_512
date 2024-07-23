@@ -3,7 +3,7 @@
 ## Author: Prof Ryan Martin (www4.stat.ncsu.edu/~rmartin)
 ## R code for Example 17.2 in Ott & Longnecker
 
-plaque <- read.table(file="../Data/example_17-2.txt", header=TRUE)
+plaque <- read.table(file="data/example_17-2.txt", header=TRUE)
 print(plaque)
 
 plaque$subject <- factor(plaque$subject)

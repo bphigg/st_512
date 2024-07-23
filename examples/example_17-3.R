@@ -3,7 +3,7 @@
 ## Author: Prof Ryan Martin (www4.stat.ncsu.edu/~rmartin)
 ## R code for Example 17.3 in Ott & Longnecker
 
-food <- read.table(file="../Data/example_17-3.txt", header=TRUE)
+food <- read.table(file="data/example_17-3.txt", header=TRUE)
 print(food)
 
 food$assay <- factor(food$assay)
