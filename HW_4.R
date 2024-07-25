@@ -8,7 +8,6 @@ levels(typing$type)
 
 o <- lm(score ~ type + sub, data=typing)
 summary(o)
-anova(o)
 
 tapply(typing$score, typing$type, mean)
 
@@ -39,12 +38,12 @@ watermelon$trt <- factor(watermelon$trt)
 
 boxplot(wgt ~ trt, data=watermelon)
 
-## a) write an appropriate statistical model for the experiment
+#### a) write an appropriate statistical model for the experiment
 ## y_ijk = mu + tau_i + rho_j + gamma_k + e_ijk
 ## mu is the base mean, tau is the change in mean based on treatment, rho is the change in mean based on row effect, gamma is the change in mean based on column effect, and e is error.
 ## Our focus in the analysis is to determine if there is a treatment effect and so our hypothesis test is to determine if all taus are equal to zero (is there at least one tau that exists). Rho and Gamma values are the same as blocking effects - we're not interested in their values (i.e. they don't tell us anything we don't already know).
 
-## b) Run an ANOVA and interpret the resultant p-values
+#### b) Run an ANOVA and interpret the resultant p-values
 o <- lm(wgt ~ row + col + trt, data=watermelon)
 anova(o)
 summary(o)
@@ -75,16 +74,16 @@ ranova(o)
 oo_red <- lmer(dna ~ (1 | subject), data=plaque_dna)
 anova(oo_red, oo)
 
-## a) what are the Expected Mean Squares
+#### a) what are the Expected Mean Squares
 ## From the EMSanova() function:
 ## subject - 10.49522
 ## analyst - 0.16650
 ## error - 0.0195
 
-## b) Run an ANOVA and test for a significant analyst effect
+#### b) Run an ANOVA and test for a significant analyst effect
 ## Using the R package lmerTest we can fit the model using lmer() function and run the model through the random effects anova function, ranova(). The results show a Chisq p-value of 0.0001934 for the analyst effect, which is well below the significance value of 0.05, indicating that we can reject the null hypothesis that the analyst effect is equal to zero. Therefore we can conclude that the analyst effect is greater than zero and thus at least one analyst has an effect on the dna readings from the plaque samples.
 
-## c) estimate the variance components associated with analysts, subject, and error
+#### c) estimate the variance components associated with analysts, subject, and error
 ## From the summary() of the model:
 ## subject variance - 2.0951
 ## analyst variance - 0.0147
@@ -101,8 +100,10 @@ anova(oo_red, oo)
 
 ## 17.7 Beer Pasteurization
 beer <- read.table(file="data/exercise_17-7.txt", header=TRUE)
+beer$lab <- factor(beer$lab)
+beer$process <- factor(beer$process)
 print(beer)
-## a) write an appropriate linear statistical model for the data; identify all terms in the model
+#### a) write an appropriate linear statistical model for the data; identify all terms in the model
 ## There are two factors in this design - pastuerizing process and the labs analyzing the samples. Both are randomly chosen, so the study type is Random Effects in a Factorial Design. The appropriate statistical model is:
 ## y_ijk = mu + alpha_i + beta_j + (alphabeta)_ij + e_ijk
 ## where mu is the base mean that includes alpha_1 (effect for lab_1), beta_1 (effect for process_1), and all interactions (alphabeta) associated with either lab_1 or process_1.
@@ -111,7 +112,7 @@ print(beer)
 ## (alphabeta)_ij is the change in mu associated with the interaction effect of lab and process assignments
 ## e_ijk is the change in mu associated with the individual error of the measured unit
 
-## b) Expected Mean Squares
+#### b) Expected Mean Squares
 
 library(EMSaov)
 EMSanova(counts ~ lab * process, data=beer, type=c("R", "R"))
@@ -121,7 +122,7 @@ EMSanova(counts ~ lab * process, data=beer, type=c("R", "R"))
 ## lab:process (interaction) - 416609.378
 ## error - 1091.175
 
-## c) state the null and alternative hypothesis testing for 1) interaction effect, 2) process effect, 3) lab effect
+#### c) state the null and alternative hypothesis testing for 1) interaction effect, 2) process effect, 3) lab effect
 ## 1) interaction - H_0: (alphabeta) = 0; H_A: (alphabeta) != 0
 ## H_0 - there is no interaction effect and so it's coefficient is equal to zero for all interactions
 ## H_A - there is at least one interaction effect
@@ -141,7 +142,7 @@ summary(o_)
 ranova(o_)
 ## from the ranova() output we can see that the p-value(Chisq) is extremely small for the interaction effect - near zero. Therefore, we can conclude that there is a significant interaction effect. From this conclusion, we do not need to test the individual effects because in order to keep the interaction in the model (which we want to do) we need to also keep the individual effects. However, the test results for both individual effects are also significant given the their respective p-value(Chisq) values.
 
-## b) estimate the variance components associated with the effects. calculate the proportion of total variation associated with each effect.
+#### b) estimate the variance components associated with the effects. calculate the proportion of total variation associated with each effect.
 ## process variance- 128696
 ## lab variance- 53264
 ## lab:process variance- (interaction) - 207759
@@ -156,5 +157,5 @@ ranova(o_)
 ## proportional error variation:
 1091 / 390810
 
-## c) is the effect due to laboratory or process greater?
-## the effect due to process is greater than the effect due to lab. It's p-value(Chisq) is significantly smaller than the p-value 
+#### c) is the effect due to laboratory or process greater?
+## the effect due to process is greater than the effect due to lab. It's p-value(Chisq) is significantly smaller than the p-value(Chisq) for the lab effect - this indicates that the plausibility of being zero, or not having an effect, is greater for the lab effect. Thus the process effect is stronger. Additionally, if we look at the proportion of total variation associated with each effect, we see that the proportion of variation attributed to the process effect is nearly twice as much as the proportion of variance attributed to the lab effect (process = 0.33, lab = 0.14) - this indicates that the process effect explains nearly 33% of the variance versus the lab effect explaining nearly 14%, so because process explains a larger portion of the variance, it is the stronger effect.
