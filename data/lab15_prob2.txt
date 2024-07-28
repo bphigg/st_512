@@ -1,0 +1,13 @@
+type site y
+hut hnk 22
+hut trk 2 
+hut ext 10
+ssm hnk 16
+ssm trk 54
+ssm ext 115
+nod hnk 19
+nod trk 33
+nod ext 73
+ind hnk 11
+ind trk 17
+ind ext 28
