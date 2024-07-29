@@ -3,7 +3,7 @@
 ## Author: Prof Ryan Martin (www4.stat.ncsu.edu/~rmartin)
 ## R code for Exercise 15.2 in Ott & Longnecker
 
-blue <- read.table(file="../Data/exercise_15-2.txt", header=TRUE)
+blue <- read.table(file="data/exercise_15-2.txt", header=TRUE)
 print(blue)
 
 blue$farm <- factor(blue$farm)
