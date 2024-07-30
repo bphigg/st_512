@@ -3,7 +3,7 @@
 ## Author: Prof Ryan Martin (www4.stat.ncsu.edu/~rmartin)
 ## R code for Example 12.23 in Ott & Longnecker
 
-plasma <- read.table(file="../Data/example_12-23.txt", header=TRUE)
+plasma <- read.table(file="data/example_12-23.txt", header=TRUE)
 print(plasma)
 
 o.glm <- glm(cbind(hth, 1 - hth) ~ fib + gam, family=binomial, data=plasma)

@@ -3,7 +3,7 @@
 ## Author: Prof Ryan Martin (www4.stat.ncsu.edu/~rmartin)
 ## R code for Exercise 12.42 in Ott & Longnecker
 
-dp <- read.table(file="../Data/exercise_12-42.txt", header=TRUE)
+dp <- read.table(file="data/exercise_12-42.txt", header=TRUE)
 print(dp)
 
 dp$agg <- factor(dp$agg)

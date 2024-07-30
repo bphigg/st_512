@@ -18,3 +18,8 @@ with(soybean, interaction.plot(phos, variety, yield))
 o <- lmer(yield ~ variety * phos + (1 | field) + (1 | variety:field), data=soybean)
 summary(o, correlation=FALSE)
 anova(o)
+
+oo <- lmer(yield ~ variety * phos + (1 | field), data=soybean)
+summary(oo, correlation=FALSE)
+anova(oo)
+anova(oo, o)

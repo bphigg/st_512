@@ -3,7 +3,7 @@
 ## Author: Prof Ryan Martin (www4.stat.ncsu.edu/~rmartin)
 ## R code for Example 17.4 in Ott & Longnecker
 
-sun <- read.table(file="../Data/example_17-4.txt", header=TRUE)
+sun <- read.table(file="data/example_17-4.txt", header=TRUE)
 print(sun)
 
 sun$sunscreen <- factor(sun$sunscreen)

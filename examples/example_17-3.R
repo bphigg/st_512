@@ -1,4 +1,4 @@
-
+ cv
 ## ST512 
 ## Author: Prof Ryan Martin (www4.stat.ncsu.edu/~rmartin)
 ## R code for Example 17.3 in Ott & Longnecker
